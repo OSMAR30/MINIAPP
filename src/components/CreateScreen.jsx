@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { LI } from './Icons';
 import { hexToRgb } from '../utils/designUtils';
+import { supabase } from '../utils/supabaseClient';
+
+function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
 
 function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
   const [script, setScript] = useState('');
@@ -19,20 +22,26 @@ function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
     if (!script.trim()) return;
     setSending(true);
     try {
-      const response = await fetch('http://localhost:5000/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ script })
-      });
-      const data = await response.json();
-      if (data.job_id) {
-        // Pass the job_id to the navigation
-        onNavigate('progress', data.job_id);
-      } else {
-        alert('Error iniciando producción: ' + (data.error || 'Desconocido'));
+      const { data, error } = await supabase
+        .from('jobs')
+        .insert([
+          { 
+            script: script, 
+            status: 'pending', 
+            progress: 0 
+          }
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (data && data.id) {
+        onNavigate('progress', data.id);
       }
     } catch (e) {
-      alert('Error de conexión con el Orquestador');
+      console.error(e);
+      alert('Error al enviar el guion a la nube');
     } finally {
       setSending(false);
     }

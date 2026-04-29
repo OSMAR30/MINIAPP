@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { LI } from './Icons';
 import { hexToRgb } from '../utils/designUtils';
+import { supabase } from '../utils/supabaseClient';
+
+function MiniCircle({ pct = 0, accent, label, icon, size = 72, active = false, done = false }) {
 
 function MiniCircle({ pct = 0, accent, label, icon, size = 72, active = false, done = false }) {
   const rgb = hexToRgb(accent);
@@ -62,27 +65,27 @@ function ProgressScreen({ accent, jobId }) {
 
     const pollStatus = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/status/${jobId}`);
-        const data = await response.json();
+        const { data, error } = await supabase
+          .from('jobs')
+          .select('*')
+          .eq('id', jobId)
+          .single();
 
-        if (data.error) {
-          setStatusMsg(`Error: ${data.error}`);
-          setRunning(false);
+        if (error) throw error;
+
+        if (!data) {
+          setStatusMsg('Trabajo no encontrado');
           return;
         }
 
         setStatusMsg(data.status);
         setRunning(data.progress < 100 && !data.cancelled);
 
-        // Extract artist name from status if possible
-        if (data.status && data.status.includes('Buscando imágenes de')) {
-          const name = data.status.split('Buscando imágenes de')[1].split('...')[0].trim();
-          setArtistName(name);
-        } else if (data.status && data.status.includes('Generando voz')) {
-          // Fallback: use a default or wait for image search to get name
+        // Extract artist name from script or status
+        if (data.artist) {
+          setArtistName(data.artist);
         }
 
-        // Map progress to steps roughly
         const p = data.progress;
         setModPcts({
           voz: p > 30 ? 100 : (p / 30) * 100,
@@ -99,7 +102,8 @@ function ProgressScreen({ accent, jobId }) {
         else setStepIdx(5);
 
       } catch (e) {
-        setStatusMsg('Error de conexión con el Orquestador');
+        console.error(e);
+        setStatusMsg('Error de conexión con la nube');
       }
     };
 
@@ -112,7 +116,12 @@ function ProgressScreen({ accent, jobId }) {
   const handleCancel = async () => {
     if (!jobId) return;
     try {
-      await fetch(`http://localhost:5000/cancel/${jobId}`, { method: 'POST' });
+      const { error } = await supabase
+        .from('jobs')
+        .update({ cancelled: true, status: 'Cancelando...' })
+        .eq('id', jobId);
+      
+      if (error) throw error;
       setStatusMsg('Cancelando proceso...');
     } catch (e) {
       alert('Error al intentar cancelar');
