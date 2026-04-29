@@ -46,50 +46,65 @@ const MODULE_STEPS = [
   { id: 'edicion', label: 'Edición', icon: 'Clapperboard' }
 ];
 
-function ProgressScreen({ accent }) {
+function ProgressScreen({ accent, jobId }) {
   const [stepIdx, setStepIdx] = useState(0);
   const [modPcts, setModPcts] = useState({ voz: 0, imagenes: 0, videos: 0, edicion: 0 });
-  const [running, setRunning] = useState(true);
-  const [cancelled, setCancelled] = useState(false);
+  const [running, setRunning] = useState(false);
+  const [statusMsg, setStatusMsg] = useState('Esperando orquestador...');
   const rgb = hexToRgb(accent);
-  const intRef = useRef();
-  const modTimers = useRef([]);
-
-  const clearAll = () => {
-    clearInterval(intRef.current);
-    modTimers.current.forEach((t) => {clearInterval(t);clearTimeout(t);});
-    modTimers.current = [];
-  };
 
   useEffect(() => {
-    setRunning(true);
-    let i = 0;
-    const modOrder = ['voz', 'imagenes', 'videos', 'edicion'];
-    modOrder.forEach((mod, mi) => {
-      let p = 0;
-      const startDelay = mi * 1100;
-      const t = setTimeout(() => {
-        const tick = setInterval(() => {
-          p = Math.min(p + 8, 100);
-          setModPcts((prev) => ({ ...prev, [mod]: p }));
-          if (p >= 100) clearInterval(tick);
-        }, 80);
-        modTimers.current.push(tick);
-      }, startDelay);
-      modTimers.current.push(t);
-    });
-    intRef.current = setInterval(() => {
-      i++; setStepIdx(i);
-      if (i >= ALL_STEPS.length) {
-        clearInterval(intRef.current);
-        setRunning(false);
-      }
-    }, 900);
-    return () => clearAll();
-  }, [accent]);
+    if (!jobId) {
+      setStatusMsg('No hay proceso activo');
+      return;
+    }
 
-  const pct = stepIdx >= ALL_STEPS.length ? 100 : Math.round(stepIdx / ALL_STEPS.length * 100);
+    const pollStatus = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/status/${jobId}`);
+        const data = await response.json();
+
+        if (data.error) {
+          setStatusMsg(`Error: ${data.error}`);
+          setRunning(false);
+          return;
+        }
+
+        setStatusMsg(data.status);
+        setRunning(data.progress < 100);
+
+        // Map progress to steps roughly
+        // Voz: 0-30%, Imagenes: 30-60%, Videos: 60-80%, Edicion: 80-100%
+        const p = data.progress;
+        setModPcts({
+          voz: p > 30 ? 100 : (p / 30) * 100,
+          imagenes: p > 60 ? 100 : p < 30 ? 0 : ((p - 30) / 30) * 100,
+          videos: p > 80 ? 100 : p < 60 ? 0 : ((p - 60) / 20) * 100,
+          edicion: p > 100 ? 100 : p < 80 ? 0 : ((p - 80) / 20) * 100,
+        });
+
+        // Update step index based on progress
+        if (p < 20) setStepIdx(0);
+        else if (p < 40) setStepIdx(1);
+        else if (p < 60) setStepIdx(2);
+        else if (p < 80) setStepIdx(3);
+        else if (p < 100) setStepIdx(4);
+        else setStepIdx(5);
+
+      } catch (e) {
+        setStatusMsg('Error de conexión con el Orquestador');
+      }
+    };
+
+    const interval = setInterval(pollStatus, 2000);
+    pollStatus();
+
+    return () => clearInterval(interval);
+  }, [jobId, accent]);
+
+  const pct = Math.round((modPcts.voz + modPcts.imagenes + modPcts.videos + modPcts.edicion) / 4);
   const R = 52, circ = 2 * Math.PI * R;
+
 
   return (
     <div style={{ padding: '20px 16px 120px', overflowY: 'auto', height: '100%' }}>
@@ -109,9 +124,9 @@ function ProgressScreen({ accent }) {
           <div style={{ position: 'absolute', inset: -4, borderRadius: '50%', background: `radial-gradient(circle,rgba(${rgb},.12) 0%,transparent 70%)`, pointerEvents: 'none', opacity: running ? 1 : .3, transition: 'opacity .5s' }}></div>
         </div>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 10, color: 'rgba(255,255,255,.3)', fontFamily: 'DM Mono', letterSpacing: 1, marginBottom: 6 }}>
-              {stepIdx >= ALL_STEPS.length ? '✓ COMPLETADO' : running ? '⬤ PROCESANDO' : '◌ EN ESPERA'}
-          </div>
+<div style={{ fontSize: 10, color: 'rgba(255,255,255,.3)', fontFamily: 'DM Mono', letterSpacing: 1, marginBottom: 6 }}>
+    {statusMsg}
+</div>
           <div style={{ fontSize: 13, color: '#fff', fontWeight: 600, marginBottom: 4 }}>Bad Bunny – Tití Me Preguntó</div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,.3)' }}>
             {stepIdx >= ALL_STEPS.length ? 'Listo para descargar' : ALL_STEPS[Math.min(stepIdx, ALL_STEPS.length - 1)]?.sub || 'Iniciando...'}

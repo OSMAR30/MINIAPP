@@ -15,10 +15,27 @@ function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
     return m ? m[1].trim() : '';
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!script.trim()) return;
     setSending(true);
-    setTimeout(() => {setSending(false);onNavigate('progress');}, 1400);
+    try {
+      const response = await fetch('http://localhost:5000/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ script })
+      });
+      const data = await response.json();
+      if (data.job_id) {
+        // Pass the job_id to the navigation
+        onNavigate('progress', data.job_id);
+      } else {
+        alert('Error iniciando producción: ' + (data.error || 'Desconocido'));
+      }
+    } catch (e) {
+      alert('Error de conexión con el Orquestador');
+    } finally {
+      setSending(false);
+    }
   };
 
   const steps = [

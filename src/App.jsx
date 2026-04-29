@@ -38,7 +38,12 @@ function App() {
     setActiveAccent(profile.color);
   };
 
-  const navigate = (screen) => setCurrentScreen(screen);
+  const [jobId, setJobId] = useState(null);
+
+  const navigate = (screen, id = null) => {
+    setCurrentScreen(screen);
+    if (id) setJobId(id);
+  };
 
   return (
     <div style={{ 
@@ -70,9 +75,9 @@ function App() {
           setVideoReady={setVideoReady}
         />
       )}
-      {currentScreen === 'progress' && (
-        <ProgressScreen accent={activeAccent} />
-      )}
+       {currentScreen === 'progress' && (
+         <ProgressScreen accent={activeAccent} jobId={jobId} />
+       )}
       {currentScreen === 'history' && (
         <HistoryScreen accent={activeAccent} />
       )}
