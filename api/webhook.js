@@ -19,7 +19,6 @@ module.exports = async (req, res) => {
     await bot.handleUpdate(req.body, res);
     res.status(200).send('OK');
   } catch (err) {
-    console.error(err);
     res.status(500).send('Error');
   }
 };
