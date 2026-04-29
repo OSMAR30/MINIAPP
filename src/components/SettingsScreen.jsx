@@ -19,7 +19,13 @@ function SettingsScreen({ accent, setAccent, profile, setProfile, profiles, setP
   const handleHueChange = (e) => {
     const h = parseInt(e.target.value);
     setHue(h);
-    setAccent(hslToHex(h, 80, 60));
+    if (h <= 2) {
+      setAccent('#000000');
+    } else if (h >= 358) {
+      setAccent('#ffffff');
+    } else {
+      setAccent(hslToHex(h, 80, 60));
+    }
   };
 
   return (
