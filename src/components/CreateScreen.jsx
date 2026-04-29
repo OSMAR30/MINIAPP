@@ -17,7 +17,10 @@ function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
   };
 
   const handleSend = async () => {
-    if (!script.trim()) return;
+    if (!script.trim() || !artist.trim()) {
+      alert('Por favor, ingresa tanto el nombre del artista como el guion');
+      return;
+    }
     setSending(true);
     try {
       const { data, error } = await supabase
@@ -25,6 +28,7 @@ function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
         .insert([
           { 
             script: script, 
+            artist: artist,
             status: 'pending', 
             progress: 0 
           }
@@ -39,7 +43,7 @@ function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
       }
     } catch (e) {
       console.error(e);
-      alert('Error al enviar el guion a la nube');
+      alert('Error al enviar la solicitud a la nube');
     } finally {
       setSending(false);
     }
@@ -59,12 +63,24 @@ function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
             <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', letterSpacing: 3, fontFamily: "'MonaSans','DM Sans',sans-serif", textTransform: 'uppercase' }}>Nuevo Video</div>
             <div style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', lineHeight: 1.5, marginTop: 4 }}>Pega el guión — el orquestador hace el resto.</div>
           </div>
+          <div style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,.45)', fontFamily: 'DM Mono', letterSpacing: 1.5, marginBottom: 8 }}>NOMBRE DEL ARTISTA</div>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <LI name="User" size={15} color="rgba(255,255,255,.3)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
+              <input
+                style={{ width: '100%', background: 'rgba(0,0,0,.28)', backdropFilter: 'blur(8px)', border: `1px solid ${artist ? `rgba(${rgb},.35)` : 'rgba(255,255,255,.12)'}`, borderRadius: 16, padding: '13px 14px 13px 38px', color: '#fff', fontSize: 14, outline: 'none', transition: 'border .2s' }}
+                placeholder="Ej: Bad Bunny"
+                value={artist}
+                onChange={(e) => setArtist(e.target.value)}
+              />
+            </div>
+          </div>
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,.45)', fontFamily: 'DM Mono', letterSpacing: 1.5, marginBottom: 8 }}>GUIÓN DEL VIDEO</div>
           <textarea
             style={{ width: '100%', background: 'rgba(0,0,0,.28)', backdropFilter: 'blur(8px)', border: `1px solid ${script ? `rgba(${rgb},.35)` : 'rgba(255,255,255,.12)'}`, borderRadius: 16, padding: '14px', color: '#ddd', fontSize: 13, lineHeight: 1.7, resize: 'none', outline: 'none', transition: 'border .2s' }}
-            placeholder={"Artista: Bad Bunny\n\n[Verso 1]\nPega aquí el guión completo del video..."}
+            placeholder={"[Verso 1]\nPega aquí el guión completo del video..."}
             value={script}
-            onChange={(e) => {setScript(e.target.value);setArtist(detect(e.target.value));}}
+            onChange={(e) => setScript(e.target.value)}
             rows={8} />
         </div>
       </div>
@@ -120,14 +136,14 @@ function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
           )}
         </div>
       </div>
-      <div style={{ padding: '0 16px' }}>
-        <button className="anim-5 btn-primary" onClick={handleSend} disabled={!script.trim() || sending}
-          style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: script.trim() ? `linear-gradient(135deg,${accent},rgba(${rgb},.7))` : 'rgba(255,255,255,.06)', color: script.trim() ? '#000' : 'rgba(255,255,255,.2)', fontSize: 15, fontWeight: 700, cursor: script.trim() ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: script.trim() ? `0 8px 30px rgba(${rgb},.3)` : 'none', transition: 'all .3s' }}>
-          {sending ?
-            <><LI name="Loader2" size={18} color="#000" style={{ animation: 'spin 1s linear infinite' }} /> Enviando al orquestador...</> :
-            <><LI name="Send" size={18} color={script.trim() ? '#000' : 'rgba(255,255,255,.2)'} strokeWidth={2} /> Iniciar producción</>
-            }
-        </button>
+        <div style={{ padding: '0 16px' }}>
+          <button className="anim-5 btn-primary" onClick={handleSend} disabled={!script.trim() || !artist.trim() || sending}
+            style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: (script.trim() && artist.trim()) ? `linear-gradient(135deg,${accent},rgba(${rgb},.7))` : 'rgba(255,255,255,.06)', color: (script.trim() && artist.trim()) ? '#000' : 'rgba(255,255,255,.2)', fontSize: 15, fontWeight: 700, cursor: (script.trim() && artist.trim()) ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: (script.trim() && artist.trim()) ? `0 8px 30px rgba(${rgb},.3)` : 'none', transition: 'all .3s' }}>
+            {sending ?
+              <><LI name="Loader2" size={18} color="#000" style={{ animation: 'spin 1s linear infinite' }} /> Enviando al orquestador...</> :
+              <><LI name="Send" size={18} color={(script.trim() && artist.trim()) ? '#000' : 'rgba(255,255,255,.2)'} strokeWidth={2} /> Iniciar producción</>
+              }
+          </button>
         <div style={{ marginTop: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
             <div style={{ fontSize: 10, color: 'rgba(255,255,255,.3)', fontFamily: 'DM Mono', letterSpacing: 1.5 }}>VIDEO GENERADO</div>
