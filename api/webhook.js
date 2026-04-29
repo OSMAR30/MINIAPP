@@ -1,4 +1,4 @@
-const { Telegraf } = require('telegraf');
+import { Telegraf } from 'telegraf';
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -14,11 +14,12 @@ bot.start((ctx) => {
 
 bot.help((ctx) => ctx.reply('Envía /start para comenzar.'));
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
     await bot.handleUpdate(req.body, res);
     res.status(200).send('OK');
   } catch (err) {
+    console.error(err);
     res.status(500).send('Error');
   }
 };
