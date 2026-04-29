@@ -64,7 +64,7 @@ function HistoryScreen({ accent }) {
   const vRgb = hexToRgb(v.color || accent);
 
   return (
-    <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden', WebkitOverflowScrolling: 'touch' }}>
+    <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden', WebkitOverflowScrolling: 'touch', paddingBottom: '120px' }}>
       <div style={{ background: `linear-gradient(160deg,rgba(${rgb},.55) 0%,rgba(${rgb},.18) 45%,rgba(${rgb},.04) 100%)`, borderRadius: '0 0 28px 28px', padding: '14px 16px 16px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -60, right: -40, width: 200, height: 200, background: `radial-gradient(circle,rgba(${rgb},.5) 0%,transparent 65%)`, pointerEvents: 'none' }}></div>
         <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>

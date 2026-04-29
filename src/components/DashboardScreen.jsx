@@ -16,7 +16,7 @@ function DashboardScreen({ accent, profile, profiles, onNavigate, onAddProfile, 
   ];
 
   return (
-    <div style={{ padding: '0 0 0', overflowY: 'auto', height: '100%' }}>
+    <div style={{ padding: '0 0 120px', overflowY: 'auto', height: '100%' }}>
       <div className="anim-1" style={{
         background: `linear-gradient(160deg, rgba(${rgb},.55) 0%, rgba(${rgb},.18) 45%, rgba(${rgb},.04) 100%)`,
         borderRadius: '0 0 28px 28px',

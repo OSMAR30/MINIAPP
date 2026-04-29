@@ -26,7 +26,7 @@ function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
   ];
 
   return (
-    <div style={{ padding: '0 0 24px', overflowY: 'auto', height: '100%' }}>
+    <div style={{ padding: '0 0 120px', overflowY: 'auto', height: '100%' }}>
       <div className="anim-1" style={{ background: `linear-gradient(160deg, rgba(${rgb},.55) 0%, rgba(${rgb},.18) 45%, rgba(${rgb},.04) 100%)`, borderRadius: '0 0 28px 28px', padding: '16px 16px 20px', marginBottom: 16, position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -60, right: -40, width: 220, height: 220, background: `radial-gradient(circle, rgba(${rgb},.5) 0%, transparent 65%)`, pointerEvents: 'none' }}></div>
         <div style={{ position: 'absolute', top: -20, left: -20, width: 160, height: 160, background: `radial-gradient(circle, rgba(${rgb},.25) 0%, transparent 70%)`, pointerEvents: 'none' }}></div>

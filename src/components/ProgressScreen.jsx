@@ -92,7 +92,7 @@ function ProgressScreen({ accent }) {
   const R = 52, circ = 2 * Math.PI * R;
 
   return (
-    <div style={{ padding: '20px 16px 24px', overflowY: 'auto', height: '100%' }}>
+    <div style={{ padding: '20px 16px 120px', overflowY: 'auto', height: '100%' }}>
       <div className="anim-1" style={{ fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 16, letterSpacing: -.5 }}>Monitor en vivo</div>
       <div className="anim-2" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
         <div style={{ position: 'relative', width: 120, height: 120, flexShrink: 0 }}>

@@ -38,8 +38,15 @@ export function RegisterModal({ accent, onSave, onClose }) {
     <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', animation: 'fadeIn .2s ease' }}>
       <div style={{ background: '#111118', borderRadius: '24px 24px 0 0', padding: '24px 20px 36px', border: '1px solid rgba(255,255,255,.08)' }}>
         <div style={{ width: 36, height: 4, background: 'rgba(255,255,255,.15)', borderRadius: 2, margin: '0 auto 24px' }}></div>
-        <div style={{ fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 4 }}>Nuevo perfil</div>
-        <div style={{ fontSize: 12, color: 'rgba(255,255,255,.35)', marginBottom: 20 }}>Personaliza tu espacio de trabajo</div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <LI name="ChevronLeft" size={20} color="#fff" />
+            <span style={{ fontSize: 14, fontWeight: 500 }}>Volver</span>
+          </button>
+          <div style={{ width: 40 }}></div>
+        </div>
+        <div style={{ fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 4, textAlign: 'center' }}>Nuevo perfil</div>
+        <div style={{ fontSize: 12, color: 'rgba(255,255,255,.35)', marginBottom: 20, textAlign: 'center' }}>Personaliza tu espacio de trabajo</div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 20, gap: 12 }}>
           <div 

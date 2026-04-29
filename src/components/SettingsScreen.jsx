@@ -23,7 +23,7 @@ function SettingsScreen({ accent, setAccent, profile, setProfile, profiles, setP
   };
 
   return (
-    <div style={{ padding: '20px 16px 40px', overflowY: 'auto', height: '100%' }}>
+    <div style={{ padding: '20px 16px 120px', overflowY: 'auto', height: '100%' }}>
       <div className="anim-1" style={{ fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 24, letterSpacing: -.5 }}>Configuración</div>
 
       <div className="anim-2" style={{ fontSize: 10, color: 'rgba(255,255,255,.3)', fontFamily: 'DM Mono', letterSpacing: 1.5, marginBottom: 10 }}>PERFILES</div>
