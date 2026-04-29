@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LI } from './Icons';
-import { hexToRgb } from '../utils/designUtils';
+import { hexToRgb, hslToHex } from '../utils/designUtils';
 
 function SettingsScreen({ accent, setAccent, profile, setProfile, profiles, setProfiles, resetAll }) {
-  const COLORS = ['#00e5a0', '#4ade80', '#38bdf8', '#a78bfa', '#f472b6', '#fb923c', '#facc15', '#ff5f5f'];
   const rgb = hexToRgb(accent);
+  const [hue, setHue] = useState(270); // Default purple-ish
 
   const deleteProfile = (p) => {
     if (profiles.length <= 1) return;
@@ -14,6 +14,12 @@ function SettingsScreen({ accent, setAccent, profile, setProfile, profiles, setP
       setProfile(next[0].name);
       setAccent(next[0].color);
     }
+  };
+
+  const handleHueChange = (e) => {
+    const h = parseInt(e.target.value);
+    setHue(h);
+    setAccent(hslToHex(h, 80, 60));
   };
 
   return (
@@ -44,12 +50,47 @@ function SettingsScreen({ accent, setAccent, profile, setProfile, profiles, setP
       </div>
 
       <div className="anim-3" style={{ fontSize: 10, color: 'rgba(255,255,255,.3)', fontFamily: 'DM Mono', letterSpacing: 1.5, marginBottom: 10 }}>COLOR DE ACENTO</div>
-      <div className="anim-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(8,1fr)', gap: 10, marginBottom: 24 }}>
-        {COLORS.map((c) => (
-          <button key={c} onClick={() => setAccent(c)} style={{ aspectRatio: '1', borderRadius: 12, border: `2px solid ${accent === c ? '#fff' : 'transparent'}`, background: c, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform .15s, border .15s', transform: accent === c ? 'scale(1.1)' : 'scale(1)' }}>
-            {accent === c && <LI name="Check" size={13} color="#000" strokeWidth={3} />}
-          </button>
-        ))}
+      <div className="anim-3" style={{ marginBottom: 24, position: 'relative' }}>
+        <div style={{ 
+          width: '100%', 
+          height: 14, 
+          borderRadius: 7, 
+          background: 'linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)', 
+          position: 'relative',
+          cursor: 'pointer',
+          border: '1px solid rgba(255,255,255,0.1)'
+        }}>
+          <input 
+            type="range" 
+            min="0" 
+            max="360" 
+            value={hue} 
+            onChange={handleHueChange}
+            style={{ 
+              position: 'absolute', 
+              inset: 0, 
+              width: '100%', 
+              height: '100%', 
+              opacity: 0, 
+              cursor: 'pointer', 
+              zIndex: 2 
+            }} 
+          />
+          <div style={{ 
+            position: 'absolute', 
+            top: '50%', 
+            left: `${(hue / 360) * 100}%`, 
+            transform: 'translate(-50%, -50%)', 
+            width: 20, 
+            height: 20, 
+            borderRadius: '50%', 
+            background: '#fff', 
+            border: '2px solid #000', 
+            boxShadow: '0 0 10px rgba(0,0,0,0.5)',
+            pointerEvents: 'none',
+            zIndex: 1
+          }}></div>
+        </div>
       </div>
 
       <div className="anim-4" style={{ marginBottom: 28 }}>
