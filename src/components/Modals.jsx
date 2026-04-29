@@ -36,7 +36,7 @@ export function RegisterModal({ accent, onSave, onClose }) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', animation: 'fadeIn .2s ease' }}>
-      <div style={{ background: '#111118', borderRadius: '24px 24px 0 0', padding: '24px 20px 36px', border: '1px solid rgba(255,255,255,.08)' }}>
+      <div style={{ background: '#111118', borderRadius: '24px 24px 0 0', padding: '24px 20px 80px', border: '1px solid rgba(255,255,255,.08)' }}>
         <div style={{ width: 36, height: 4, background: 'rgba(255,255,255,.15)', borderRadius: 2, margin: '0 auto 24px' }}></div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
           <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: 4 }}>

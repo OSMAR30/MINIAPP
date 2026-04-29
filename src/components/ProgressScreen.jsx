@@ -148,6 +148,23 @@ function ProgressScreen({ accent, jobId }) {
           <div style={{ position: 'absolute', inset: -4, borderRadius: '50%', background: `radial-gradient(circle,rgba(${rgb},.12) 0%,transparent 70%)`, pointerEvents: 'none', opacity: running ? 1 : .3, transition: 'opacity .5s' }}></div>
         </div>
         <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,.3)', fontFamily: 'DM Mono', letterSpacing: 1, marginBottom: 6 }}>
+            {statusMsg}
+          </div>
+          <div style={{ fontSize: 13, color: '#fff', fontWeight: 600, marginBottom: 4 }}>{artistName}</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,.3)', display: 'none' }}>
+            {stepIdx >= ALL_STEPS.length ? 'Listo para descargar' : ALL_STEPS[Math.min(stepIdx, ALL_STEPS.length - 1)]?.sub || 'Iniciando...'}
+          </div>
+          <div style={{ display: 'flex', gap: 4, marginTop: 10 }}>
+            {ALL_STEPS.map((_, i) =>
+            <div key={i} style={{ height: 3, flex: 1, borderRadius: 2, background: i < stepIdx ? accent : i === stepIdx && running ? `rgba(${rgb},.5)` : 'rgba(255,255,255,.08)', transition: 'background .4s' }}></div>
+            )}
+          </div>
+        </div>
+      </div>
+          <div style={{ position: 'absolute', inset: -4, borderRadius: '50%', background: `radial-gradient(circle,rgba(${rgb},.12) 0%,transparent 70%)`, pointerEvents: 'none', opacity: running ? 1 : .3, transition: 'opacity .5s' }}></div>
+        </div>
+        <div style={{ flex: 1 }}>
 <div style={{ fontSize: 10, color: 'rgba(255,255,255,.3)', fontFamily: 'DM Mono', letterSpacing: 1, marginBottom: 6 }}>
     {statusMsg}
 </div>
@@ -161,9 +178,9 @@ function ProgressScreen({ accent, jobId }) {
             )}
         </div>
       </div>
-      <div style={{ padding: '0 16px 40px' }}>
-        <button onClick={handleCancel} disabled={!running} style={{ width: '100%', padding: '14px', borderRadius: 16, border: '1px solid rgba(255,95,95,.3)', background: running ? 'rgba(255,95,95,.1)' : 'rgba(255,255,255,.05)', color: running ? '#ff5f5f' : 'rgba(255,255,255,.3)', fontSize: 14, fontWeight: 600, cursor: running ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all .2s' }}>
-          <LI name="XCircle" size={18} color={running ? '#ff5f5f' : 'rgba(255,255,255,.3)'} />
+      <div style={{ padding: '0 16px 80px' }}>
+        <button onClick={handleCancel} disabled={!running} style={{ width: '100%', padding: '10px', borderRadius: 12, border: '1px solid rgba(255,95,95,.3)', background: running ? 'rgba(255,95,95,.1)' : 'rgba(255,255,255,.05)', color: running ? '#ff5f5f' : 'rgba(255,255,255,.3)', fontSize: 13, fontWeight: 600, cursor: running ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all .2s' }}>
+          <LI name="XCircle" size={16} color={running ? '#ff5f5f' : 'rgba(255,255,255,.3)'} />
           Cancelar Producción
         </button>
       </div>

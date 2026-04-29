@@ -55,7 +55,7 @@ function SettingsScreen({ accent, setAccent, profile, setProfile, profiles, setP
           width: '100%', 
           height: 14, 
           borderRadius: 7, 
-          background: 'linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)', 
+          background: 'linear-gradient(to right, #000, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000, #fff)', 
           position: 'relative',
           cursor: 'pointer',
           border: '1px solid rgba(255,255,255,0.1)'
