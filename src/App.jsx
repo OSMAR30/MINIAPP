@@ -3,6 +3,7 @@ import DashboardScreen from './components/DashboardScreen';
 import CreateScreen from './components/CreateScreen';
 import ProgressScreen from './components/ProgressScreen';
 import { RegisterModal, ProfileSwitcher } from './components/Modals';
+import { BottomNav } from './components/BottomNav';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('home');
@@ -35,7 +36,18 @@ function App() {
     setActiveAccent(profile.color);
   };
 
-  const navigate = (screen) => setCurrentScreen(screen);
+  const navigate = (screen) => {
+    if (screen === 'home') setCurrentScreen('home');
+    else if (screen === 'progress') setCurrentScreen('progress');
+    else if (screen === 'create') setCurrentScreen('create');
+    else if (screen === 'history') {
+        // Placeholder for history
+        alert('Historial próximamente');
+    } else if (screen === 'config') {
+        // Placeholder for config
+        alert('Configuración próximamente');
+    }
+  };
 
   return (
     <div style={{ 
@@ -78,6 +90,12 @@ function App() {
           onClose={() => setShowRegister(false)} 
         />
       )}
+
+      <BottomNav 
+        activeScreen={currentScreen === 'home' ? 'home' : currentScreen} 
+        onNavigate={navigate} 
+        accent={activeAccent} 
+      />
     </div>
   );
 }
