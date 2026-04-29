@@ -75,16 +75,23 @@ function ProgressScreen({ accent, jobId }) {
           return;
         }
 
-        setStatusMsg(data.status);
+        // CLEAN STATUS: Remove any long strings that look like scripts
+        let cleanStatus = data.status;
+        if (cleanStatus && cleanStatus.length > 60) {
+          cleanStatus = "Procesando producción...";
+        }
+        setStatusMsg(cleanStatus);
+        
         setRunning(data.progress < 100 && !data.cancelled);
         if (data.artist) setArtistName(data.artist);
 
         const p = data.progress;
+        // COHERENT PROGRESS: Modules only fill up as global progress passes thresholds
         setModPcts({
-          voz: p > 30 ? 100 : (p / 30) * 100,
-          imagenes: p > 60 ? 100 : p < 30 ? 0 : ((p - 30) / 30) * 100,
-          videos: p > 80 ? 100 : p < 60 ? 0 : ((p - 60) / 20) * 100,
-          edicion: p > 100 ? 100 : p < 80 ? 0 : ((p - 80) / 20) * 100,
+          voz: p >= 30 ? 100 : (p / 30) * 100,
+          imagenes: p >= 60 ? 100 : p < 30 ? 0 : ((p - 30) / 30) * 100,
+          videos: p >= 80 ? 100 : p < 60 ? 0 : ((p - 60) / 20) * 100,
+          edicion: p >= 100 ? 100 : p < 80 ? 0 : ((p - 80) / 20) * 100,
         });
 
         if (p < 20) setStepIdx(0);
