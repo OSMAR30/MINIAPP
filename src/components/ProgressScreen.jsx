@@ -4,8 +4,6 @@ import { hexToRgb } from '../utils/designUtils';
 import { supabase } from '../utils/supabaseClient';
 
 function MiniCircle({ pct = 0, accent, label, icon, size = 72, active = false, done = false }) {
-
-function MiniCircle({ pct = 0, accent, label, icon, size = 72, active = false, done = false }) {
   const rgb = hexToRgb(accent);
   const R = size / 2 - 7;
   const circ = 2 * Math.PI * R;
@@ -18,15 +16,15 @@ function MiniCircle({ pct = 0, accent, label, icon, size = 72, active = false, d
           strokeDasharray={circ} strokeDashoffset={circ * (1 - pct / 100)}
           strokeLinecap="round" style={{ transition: 'stroke-dashoffset .8s cubic-bezier(.4,0,.2,1), stroke .4s' }} />
         </svg>
-<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-    {done ?
-    <LI name="Check" size={16} color={accent} strokeWidth={2.5} /> :
-    active ?
-    <LI name="Loader2" size={15} color={accent} style={{ animation: 'spin 1s linear infinite' }} /> :
-    <LI name={icon} size={15} color={pct > 0 ? accent : 'rgba(255,255,255,.2)'} />
-    }
-    <span style={{ fontSize: 9, fontFamily: 'DM Mono', color: pct > 0 || done ? accent : 'rgba(255,255,255,.25)', fontWeight: 500 }}>{done ? '✓' : pct + '%'}</span>
-  </div>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+          {done ?
+          <LI name="Check" size={16} color={accent} strokeWidth={2.5} /> :
+          active ?
+          <LI name="Loader2" size={15} color={accent} style={{ animation: 'spin 1s linear infinite' }} /> :
+          <LI name={icon} size={15} color={pct > 0 ? accent : 'rgba(255,255,255,.2)'} />
+          }
+          <span style={{ fontSize: 9, fontFamily: 'DM Mono', color: pct > 0 || done ? accent : 'rgba(255,255,255,.25)', fontWeight: 500 }}>{done ? '✓' : pct + '%'}</span>
+        </div>
         {active && <div style={{ position: 'absolute', inset: -3, borderRadius: '50%', background: `radial-gradient(circle,rgba(${rgb},.15) 0%,transparent 70%)`, animation: 'glow 1.5s ease-in-out infinite' }}></div>}
       </div>
       <span style={{ fontSize: 10, color: done ? accent : active ? '#fff' : 'rgba(255,255,255,.3)', fontFamily: 'DM Mono', letterSpacing: .5, fontWeight: active ? 600 : 400 }}>{label}</span>
