@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import DashboardScreen from './components/DashboardScreen';
 import CreateScreen from './components/CreateScreen';
 import ProgressScreen from './components/ProgressScreen';
+import HistoryScreen from './components/HistoryScreen';
+import SettingsScreen from './components/SettingsScreen';
 import { RegisterModal, ProfileSwitcher } from './components/Modals';
 import { BottomNav } from './components/BottomNav';
 
@@ -36,18 +38,7 @@ function App() {
     setActiveAccent(profile.color);
   };
 
-  const navigate = (screen) => {
-    if (screen === 'home') setCurrentScreen('home');
-    else if (screen === 'progress') setCurrentScreen('progress');
-    else if (screen === 'create') setCurrentScreen('create');
-    else if (screen === 'history') {
-        // Placeholder for history
-        alert('Historial próximamente');
-    } else if (screen === 'config') {
-        // Placeholder for config
-        alert('Configuración próximamente');
-    }
-  };
+  const navigate = (screen) => setCurrentScreen(screen);
 
   return (
     <div style={{ 
@@ -82,6 +73,20 @@ function App() {
       {currentScreen === 'progress' && (
         <ProgressScreen accent={activeAccent} />
       )}
+      {currentScreen === 'history' && (
+        <HistoryScreen accent={activeAccent} />
+      )}
+      {currentScreen === 'settings' && (
+        <SettingsScreen 
+          accent={activeAccent} 
+          setAccent={setActiveAccent} 
+          profile={activeProfileName} 
+          setProfile={setActiveProfileName} 
+          profiles={profiles} 
+          setProfiles={setProfiles} 
+          resetAll={() => alert('Historial reiniciado')} 
+        />
+      )}
 
       {showRegister && (
         <RegisterModal 
@@ -92,8 +97,8 @@ function App() {
       )}
 
       <BottomNav 
-        activeScreen={currentScreen === 'home' ? 'home' : currentScreen} 
-        onNavigate={navigate} 
+        active={currentScreen} 
+        onNav={navigate} 
         accent={activeAccent} 
       />
     </div>
