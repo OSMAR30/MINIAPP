@@ -36,7 +36,7 @@ export function RegisterModal({ accent, onSave, onClose }) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(8px)', zIndex: 100, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', animation: 'fadeIn .2s ease' }}>
-      <div style={{ background: '#111118', borderRadius: '24px 24px 0 0', padding: '24px 20px 40px', border: '1px solid rgba(255,255,255,.08)', maxHeight: '// a bit less than 100vh to ensure visibility' }}>
+      <div style={{ background: '#111118', borderRadius: '24px 24px 0 0', padding: '24px 20px 120px', border: '1px solid rgba(255,255,255,.08)' }}>
         <div style={{ width: 36, height: 4, background: 'rgba(255,255,255,.15)', borderRadius: 2, margin: '0 auto 24px' }}></div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
           <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -104,7 +104,7 @@ export function RegisterModal({ accent, onSave, onClose }) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10, marginBottom: 100 }}>
           <button onClick={onClose} style={{ flex: 1, padding: '14px', borderRadius: 14, border: '1px solid rgba(255,255,255,.1)', background: 'transparent', color: 'rgba(255,255,255,.5)', fontSize: 14, cursor: 'pointer' }}>Cancelar</button>
           <button onClick={handleSave} disabled={!name.trim()} style={{ flex: 2, padding: '14px', borderRadius: 14, border: 'none', background: name.trim() ? `linear-gradient(135deg,${color},rgba(${rgb},.6))` : 'rgba(255,255,255,.08)', color: name.trim() ? '#000' : 'rgba(255,255,255,.2)', fontSize: 14, fontWeight: 700, cursor: name.trim() ? 'pointer' : 'default', transition: 'all .2s' }}>
             Crear perfil
