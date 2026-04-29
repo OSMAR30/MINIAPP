@@ -1,38 +1,83 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import DashboardScreen from './components/DashboardScreen';
+import CreateScreen from './components/CreateScreen';
+import ProgressScreen from './components/ProgressScreen';
+import { RegisterModal, ProfileSwitcher } from './components/Modals';
 
 function App() {
+  const [currentScreen, setCurrentScreen] = useState('home');
+  const [profiles, setProfiles] = useState([
+    { id: 1, name: 'STREET VIVES 2', color: '#a78bfa', emoji: '🎬' }
+  ]);
+  const [activeProfileName, setActiveProfileName] = useState('STREET VIVES 2');
+  const [activeAccent, setActiveAccent] = useState('#a78bfa');
+  const [showRegister, setShowRegister] = useState(false);
+  const [videoReady, setVideoReady] = useState(null);
+
   useEffect(() => {
     const tg = window.Telegram.WebApp;
     tg.expand();
   }, []);
 
-  const user = window.Telegram.WebApp.initDataUnsafe?.user;
+  const activeProfile = profiles.find(p => p.name === activeProfileName) || profiles[0];
+
+  const handleAddProfile = () => setShowRegister(true);
+  
+  const handleSaveProfile = (newProfile) => {
+    setProfiles([...profiles, newProfile]);
+    setActiveProfileName(newProfile.name);
+    setActiveAccent(newProfile.color);
+    setShowRegister(false);
+  };
+
+  const handleSelectProfile = (profile) => {
+    setActiveProfileName(profile.name);
+    setActiveAccent(profile.color);
+  };
+
+  const navigate = (screen) => setCurrentScreen(screen);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 font-sans text-gray-800">
-      <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full text-center">
-        <h1 className="text-3xl font-bold mb-4 text-blue-600">🚀 Mini App</h1>
-        <p className="text-gray-600 mb-6">
-          Bienvenido a tu nuevo lienzo en blanco.
-        </p>
-        
-        {user ? (
-          <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 text-left mb-6">
-            <p className="text-sm font-semibold text-blue-800 mb-2">Usuario de Telegram:</p>
-            <p className="text-gray-700">Nombre: {user.first_name} {user.last_name}</p>
-            <p className="text-gray-700">Username: @{user.username}</p>
-          </div>
-        ) : (
-          <p className="text-red-500 mb-6 text-sm">No se detectó usuario de Telegram (Abre desde el Bot)</p>
-        )}
+    <div style={{ 
+      width: '100vw', 
+      height: '100vh', 
+      background: '#06060a', 
+      color: '#fff', 
+      fontFamily: 'DM Sans, sans-serif',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {currentScreen === 'home' && (
+        <DashboardScreen 
+          accent={activeAccent} 
+          profile={activeProfileName} 
+          profiles={profiles}
+          onNavigate={navigate}
+          onAddProfile={handleAddProfile}
+          setProfile={setActiveProfileName}
+          setAccent={setActiveAccent}
+          stats={{ videos: 12, inCourse: 2, errors: 1 }}
+        />
+      )}
+      {currentScreen === 'create' && (
+        <CreateScreen 
+          accent={activeAccent} 
+          onNavigate={navigate}
+          videoReady={videoReady}
+          setVideoReady={setVideoReady}
+        />
+      )}
+      {currentScreen === 'progress' && (
+        <ProgressScreen accent={activeAccent} />
+      )}
 
-        <button 
-          onClick={() => alert('¡Hola desde la Mini App!')}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-all duration-200 transform hover:scale-105"
-        >
-          Interactuar
-        </button>
-      </div>
+      {showRegister && (
+        <RegisterModal 
+          accent={activeAccent} 
+          onSave={handleSaveProfile} 
+          onClose={() => setShowRegister(false)} 
+        />
+      )}
     </div>
   );
 }
