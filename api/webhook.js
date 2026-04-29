@@ -10,7 +10,6 @@ app.use(express.json());
 
 const APP_URL = process.env.APP_URL;
 
-// Lógica del bot
 bot.start((ctx) => {
   ctx.reply(`Bienvenido a tu Mini App en Vercel!`, {
     reply_markup: {
@@ -23,7 +22,6 @@ bot.start((ctx) => {
 
 bot.help((ctx) => ctx.reply('Envía /start para comenzar.'));
 
-// Endpoint para que Telegram envíe los mensajes (Webhook)
 app.post('/api/webhook', (req, res) => {
   bot.handleUpdate(req.body, res);
 });
