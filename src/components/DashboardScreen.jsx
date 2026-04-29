@@ -20,7 +20,7 @@ function DashboardScreen({ accent, profile, profiles, onNavigate, onAddProfile, 
       <div className="anim-1" style={{
         background: `linear-gradient(160deg, rgba(${rgb},.55) 0%, rgba(${rgb},.18) 45%, rgba(${rgb},.04) 100%)`,
         borderRadius: '0 0 28px 28px',
-        padding: '16px 16px 20px',
+        padding: '60px 16px 20px',
         marginBottom: 16,
         position: 'relative',
         overflow: 'hidden'
@@ -30,12 +30,12 @@ function DashboardScreen({ accent, profile, profiles, onNavigate, onAddProfile, 
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, position: 'relative', zIndex: 1 }}>
           <button onClick={() => setShowSwitcher(true)} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-            <div style={{ width: 46, height: 46, borderRadius: '50%', background: `linear-gradient(135deg,${activeProfile?.color || accent},rgba(${rgb},.4))`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0, boxShadow: `0 4px 16px rgba(${rgb},.4)`, position: 'relative' }}>
-              {activeProfile?.emoji || '🎬'}
-              <div style={{ position: 'absolute', bottom: 0, right: 0, width: 12, height: 12, borderRadius: '50%', background: '#09090f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: 7, height: 7, borderRadius: '50%', background: accent, animation: 'pulse 2s infinite' }}></div>
-              </div>
-            </div>
+             <div style={{ width: 46, height: 46, borderRadius: '50%', background: `linear-gradient(135deg,${activeProfile?.color || accent},rgba(${rgb},.4))`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0, boxShadow: `0 4px 16px rgba(${rgb},.4)`, position: 'relative', overflow: 'hidden' }}>
+               {activeProfile?.photo ? <img src={activeProfile.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (activeProfile?.emoji || '🎬')}
+               <div style={{ position: 'absolute', bottom: 0, right: 0, width: 12, height: 12, borderRadius: '50%', background: '#09090f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                 <div style={{ width: 7, height: 7, borderRadius: '50%', background: accent, animation: 'pulse 2s infinite' }}></div>
+               </div>
+             </div>
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', fontFamily: 'DM Mono', letterSpacing: 1.5, marginBottom: 2 }}>PERFIL ACTIVO</div>
               <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', letterSpacing: -.3, lineHeight: 1, display: 'flex', alignItems: 'center', gap: 5 }}>
