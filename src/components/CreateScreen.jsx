@@ -4,8 +4,6 @@ import { hexToRgb } from '../utils/designUtils';
 import { supabase } from '../utils/supabaseClient';
 
 function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
-
-function CreateScreen({ accent, onNavigate, videoReady, setVideoReady }) {
   const [script, setScript] = useState('');
   const [artist, setArtist] = useState('');
   const [sending, setSending] = useState(false);
