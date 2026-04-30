@@ -3,8 +3,7 @@ import { LI } from './Icons';
 import { Counter } from './Counter';
 import { hexToRgb } from '../utils/designUtils';
 
-function DashboardScreen({ accent, profile, profiles, onNavigate, onAddProfile, setProfile, setAccent, stats = {} }) {
-  const [showSwitcher, setShowSwitcher] = useState(false);
+function DashboardScreen({ accent, profile, profiles, onNavigate, onAddProfile, onOpenSwitcher, setProfile, setAccent, stats = {} }) {
   const rgb = hexToRgb(accent);
   const activeProfile = profiles.find((p) => p.name === profile) || profiles[0];
   const modules = [
@@ -29,13 +28,13 @@ function DashboardScreen({ accent, profile, profiles, onNavigate, onAddProfile, 
         <div style={{ position: 'absolute', top: -20, left: -20, width: 160, height: 160, background: `radial-gradient(circle, rgba(${rgb},.25) 0%, transparent 70%)`, pointerEvents: 'none' }}></div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, position: 'relative', zIndex: 1 }}>
-          <button onClick={() => setShowSwitcher(true)} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-             <div style={{ width: 46, height: 46, borderRadius: '50%', background: `linear-gradient(135deg,${activeProfile?.color || accent},rgba(${rgb},.4))`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0, boxShadow: `0 4px 16px rgba(${rgb},.4)`, position: 'relative', overflow: 'hidden' }}>
-               {activeProfile?.photo ? <img src={activeProfile.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (activeProfile?.emoji || '🎬')}
-               <div style={{ position: 'absolute', bottom: 0, right: 0, width: 12, height: 12, borderRadius: '50%', background: '#09090f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                 <div style={{ width: 7, height: 7, borderRadius: '50%', background: accent, animation: 'pulse 2s infinite' }}></div>
-               </div>
-             </div>
+          <button onClick={onOpenSwitcher} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+            <div style={{ width: 46, height: 46, borderRadius: '50%', background: `linear-gradient(135deg,${activeProfile?.color || accent},rgba(${rgb},.4))`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0, boxShadow: `0 4px 16px rgba(${rgb},.4)`, position: 'relative', overflow: 'hidden' }}>
+              {activeProfile?.photo ? <img src={activeProfile.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (activeProfile?.emoji || '🎬')}
+              <div style={{ position: 'absolute', bottom: 0, right: 0, width: 12, height: 12, borderRadius: '50%', background: '#09090f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 7, height: 7, borderRadius: '50%', background: accent, animation: 'pulse 2s infinite' }}></div>
+              </div>
+            </div>
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', fontFamily: 'DM Mono', letterSpacing: 1.5, marginBottom: 2 }}>PERFIL ACTIVO</div>
               <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', letterSpacing: -.3, lineHeight: 1, display: 'flex', alignItems: 'center', gap: 5 }}>

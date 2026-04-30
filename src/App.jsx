@@ -15,6 +15,7 @@ function App() {
   const [activeProfileName, setActiveProfileName] = useState('STREET VIVES 2');
   const [activeAccent, setActiveAccent] = useState('#a78bfa');
   const [showRegister, setShowRegister] = useState(false);
+  const [showSwitcher, setShowSwitcher] = useState(false);
   const [videoReady, setVideoReady] = useState(null);
 
   useEffect(() => {
@@ -62,6 +63,7 @@ function App() {
           profiles={profiles}
           onNavigate={navigate}
           onAddProfile={handleAddProfile}
+          onOpenSwitcher={() => setShowSwitcher(true)}
           setProfile={setActiveProfileName}
           setAccent={setActiveAccent}
           stats={{ videos: 12, inCourse: 2, errors: 1 }}
@@ -93,13 +95,25 @@ function App() {
         />
       )}
 
-      {showRegister && (
-        <RegisterModal 
-          accent={activeAccent} 
-          onSave={handleSaveProfile} 
-          onClose={() => setShowRegister(false)} 
-        />
-      )}
+       {showRegister && (
+         <RegisterModal 
+           accent={activeAccent} 
+           onSave={handleSaveProfile} 
+           onClose={() => setShowRegister(false)} 
+         />
+       )}
+
+       {showSwitcher && (
+         <ProfileSwitcher 
+           profiles={profiles}
+           activeProfile={activeProfile}
+           accent={activeAccent}
+           onSelect={handleSelectProfile}
+           onAdd={handleAddProfile}
+           onClose={() => setShowSwitcher(false)}
+         />
+       )}
+
 
       <BottomNav 
         active={currentScreen} 

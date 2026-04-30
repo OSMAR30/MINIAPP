@@ -40,8 +40,8 @@ function SettingsScreen({ accent, setAccent, profile, setProfile, profiles, setP
           return (
             <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: isActive ? `rgba(${pRgb},.08)` : 'transparent', borderBottom: i < profiles.length - 1 ? '1px solid rgba(255,255,255,.05)' : 'none', transition: 'background .2s' }}>
               <button onClick={() => {setProfile(p.name);setAccent(p.color);}} style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: `linear-gradient(135deg,${p.color},rgba(${pRgb},.4))`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>
-                  {p.emoji || '🎬'}
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: `linear-gradient(135deg,${p.color},rgba(${pRgb},.4))`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, overflow: 'hidden' }}>
+                  {p.photo ? <img src={p.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (p.emoji || '🎬')}
                 </div>
                 <span style={{ flex: 1, textAlign: 'left', fontSize: 14, color: isActive ? '#fff' : 'rgba(255,255,255,.4)', fontWeight: isActive ? 600 : 400 }}>{p.name}</span>
                 {isActive && <LI name="CheckCircle2" size={16} color={p.color} />}
